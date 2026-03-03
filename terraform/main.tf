@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket         = "devops-agent-tfstate"
-    key            = "ec2-new/terraform.tfstate"
+    key            = "ec2-test/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
   }
@@ -19,7 +19,7 @@ provider "aws" {
 
 variable "project_name" {
   type    = string
-  default = "ec2-new"
+  default = "ec2-test"
 }
 
 variable "aws_region" {
