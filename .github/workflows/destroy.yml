@@ -1,4 +1,4 @@
-name: Destroy ec2-test Infrastructure
+name: Destroy ec2-new Infrastructure
 
 on:
   workflow_dispatch:
@@ -15,23 +15,26 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
 
       - name: Terraform Init
+        working-directory: ./
         run: |
           terraform init \
             -backend-config="bucket=devops-agent-tfstate" \
-            -backend-config="key=ec2-test/terraform.tfstate" \
+            -backend-config="key=ec2-new/terraform.tfstate" \
             -backend-config="region=us-east-1" \
             -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
             -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
 
       - name: Terraform Destroy
+        working-directory: ./
         run: |
-          terraform destroy \
-            -auto-approve \
+          terraform destroy -auto-approve \
             -var="aws_region=${{ secrets.AWS_REGION }}" \
             -var="ssh_public_key=${{ secrets.SSH_PUBLIC_KEY }}"
