@@ -30,7 +30,7 @@
 
     - name: Copy HTML file
       copy:
-        src: ../html/index.html
+        src: html/index.html
         dest: /var/www/html/index.html
         mode: '0644'
         owner: www-data
@@ -57,8 +57,6 @@
           }
         dest: /etc/nginx/sites-enabled/app
         mode: '0644'
-        owner: root
-        group: root
       notify: restart nginx
 
     - name: Ensure nginx is started and enabled
