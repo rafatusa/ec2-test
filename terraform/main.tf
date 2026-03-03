@@ -99,6 +99,7 @@ resource "aws_security_group" "sg" {
   }
   lifecycle {
     create_before_destroy = true
+    ignore_changes        = [name, description]
   }
   tags = {
     Project   = var.project_name
