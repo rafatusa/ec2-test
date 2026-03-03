@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket         = "devops-agent-tfstate"
-    key            = "ec2-test/terraform.tfstate"
+    key            = "ec2-new/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
   }
@@ -19,7 +19,7 @@ provider "aws" {
 
 variable "project_name" {
   type    = string
-  default = "ec2-test"
+  default = "ec2-new"
 }
 
 variable "aws_region" {
@@ -107,11 +107,11 @@ resource "aws_security_group" "sg" {
 }
 
 resource "aws_instance" "server" {
-  ami                         = data.aws_ami.ubuntu.id
-  instance_type               = var.instance_type
-  key_name                    = aws_key_pair.deployer.key_name
-  vpc_security_group_ids      = [aws_security_group.sg.id]
-  associate_public_ip_address = true
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.instance_type
+  key_name               = aws_key_pair.deployer.key_name
+  subnet_id              = tolist(data.aws_subnets.default.ids)[0]
+  vpc_security_group_ids = [aws_security_group.sg.id]
 
   root_block_device {
     volume_size = 20
